@@ -11,24 +11,24 @@ namespace RestWithASPNETUdemy.Controllers
   public class PersonController : ControllerBase
   {
     private readonly ILogger<PersonController> _logger;
-    private IPersonBusiness _persoBusiness;
+    private IPersonBusiness _personBusiness;
 
     public PersonController(ILogger<PersonController> logger, IPersonBusiness personBusiness)
     {
       _logger = logger;
-      _persoBusiness = personBusiness;
+      _personBusiness = personBusiness;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-      return Ok(_persoBusiness.FindAll());
+      return Ok(_personBusiness.FindAll());
     }
 
     [HttpGet("{id}")]
     public IActionResult Get(long id)
     {
-      var person = _persoBusiness.FindById(id);
+      var person = _personBusiness.FindById(id);
 
       if (person == null) return NotFound();
 
@@ -40,7 +40,7 @@ namespace RestWithASPNETUdemy.Controllers
     {
       if (person == null) return BadRequest();
 
-      return Ok(_persoBusiness.Create(person));
+      return Ok(_personBusiness.Create(person));
     }
 
     [HttpPut]
@@ -48,13 +48,13 @@ namespace RestWithASPNETUdemy.Controllers
     {
       if (person == null) return BadRequest();
 
-      return Ok(_persoBusiness.Update(person));
+      return Ok(_personBusiness.Update(person));
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(long id)
     {
-      _persoBusiness.Delete(id);
+      _personBusiness.Delete(id);
 
       return NoContent();
     }
