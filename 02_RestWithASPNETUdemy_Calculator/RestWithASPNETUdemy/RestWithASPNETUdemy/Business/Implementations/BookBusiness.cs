@@ -1,41 +1,44 @@
-﻿using RestWithASPNETUdemy.Model;
-using RestWithASPNETUdemy.Model.Context;
+﻿using RestWithASPNETUdemy.Data.Converter.Implementations;
+using RestWithASPNETUdemy.Data.VO;
+using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RestWithASPNETUdemy.Business.Implementations
 {
   public class BookBusiness : IBookBusiness
   {
-    private readonly IBookRepository _bookRepository;
+    private readonly IRepository<Book> _bookRepository;
+    private readonly BookConverter _converter;
 
-    public BookBusiness(IBookRepository context)
+    public BookBusiness(IRepository<Book> context)
     {
       _bookRepository = context;
+      _converter = new BookConverter();
     }
 
-    public List<Book> FindAll()
+    public List<BookVO> FindAll()
     {
-      return _bookRepository.FindAll();
+      return _converter.Parse(_bookRepository.FindAll());
     }
 
-    public Book FindById(long id)
+    public BookVO FindById(long id)
     {
-      return _bookRepository.FindById(id);
+      return _converter.Parse(_bookRepository.FindById(id));
     }
 
-    public Book Create(Book book)
+    public BookVO Create(BookVO book)
     {
-
-      return _bookRepository.Create(book);
+      var bookEntity = _converter.Parse(book);
+      bookEntity = _bookRepository.Create(bookEntity);
+      return _converter.Parse(bookEntity);
     }
 
-    public Book Update(Book book)
+    public BookVO Update(BookVO book)
     {
-
-      return _bookRepository.Update(book);
+      var bookEntity = _converter.Parse(book);
+      bookEntity = _bookRepository.Update(bookEntity);
+      return _converter.Parse(bookEntity);
     }
 
     public void Delete(long id)

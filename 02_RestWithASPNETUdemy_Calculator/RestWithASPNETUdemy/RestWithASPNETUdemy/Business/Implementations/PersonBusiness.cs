@@ -1,41 +1,44 @@
-﻿using RestWithASPNETUdemy.Model;
-using RestWithASPNETUdemy.Model.Context;
+﻿using RestWithASPNETUdemy.Data.Converter.Implementations;
+using RestWithASPNETUdemy.Data.VO;
+using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RestWithASPNETUdemy.Business.Implementations
 {
   public class PersonBusiness : IPersonBusiness
   {
-    private readonly IPersonRepository _personRepository;
+    private readonly IRepository<Person> _personRepository;
+    private readonly PersonConverter _converter;
 
-    public PersonBusiness(IPersonRepository context)
+    public PersonBusiness(IRepository<Person> context)
     {
       _personRepository = context;
+      _converter = new PersonConverter();
     }
 
-    public List<Person> FindAll()
+    public List<PersonVO> FindAll()
     {
-      return _personRepository.FindAll();
+      return _converter.Parse(_personRepository.FindAll());
     }
 
-    public Person FindById(long id)
+    public PersonVO FindById(long id)
     {
-      return _personRepository.FindById(id);
+      return _converter.Parse(_personRepository.FindById(id));
     }
 
-    public Person Create(Person person)
+    public PersonVO Create(PersonVO person)
     {
-
-      return _personRepository.Create(person);
+      var personEntity = _converter.Parse(person);
+      personEntity = _personRepository.Create(personEntity);
+      return _converter.Parse(personEntity);
     }
 
-    public Person Update(Person person)
+    public PersonVO Update(PersonVO person)
     {
-
-      return _personRepository.Update(person);
+      var personEntity = _converter.Parse(person);
+      personEntity = _personRepository.Update(personEntity);
+      return _converter.Parse(personEntity);
     }
 
     public void Delete(long id)
