@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using RestWithASPNETUdemy.Business;
 using RestWithASPNETUdemy.Business.Implementations;
+using RestWithASPNETUdemy.HyperMedia.Enricher;
+using RestWithASPNETUdemy.HyperMedia.Filters;
 using RestWithASPNETUdemy.Model.Context;
 using RestWithASPNETUdemy.Repository;
 using RestWithASPNETUdemy.Repository.Generic;
@@ -50,6 +52,12 @@ namespace RestWithASPNETUdemy
         options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
       }).AddXmlSerializerFormatters();
 
+      var filterOptions = new HyperMediaFilterOptions();
+      filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+      filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+
+      services.AddSingleton(filterOptions);
+
       //Versioning API
       services.AddApiVersioning();
 
@@ -76,6 +84,7 @@ namespace RestWithASPNETUdemy
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
+        endpoints.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
       });
     }
 

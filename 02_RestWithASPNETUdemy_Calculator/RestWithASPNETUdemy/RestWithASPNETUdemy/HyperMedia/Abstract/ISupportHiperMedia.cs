@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace RestWithASPNETUdemy.Hipermedia.Abstract
+namespace RestWithASPNETUdemy.HyperMedia.Abstract
 {
-  public interface ISupportHiperMedia
+  public interface ISupportHyperMedia
   {
     List<HyperMediaLink> Links { get; set; }
   }

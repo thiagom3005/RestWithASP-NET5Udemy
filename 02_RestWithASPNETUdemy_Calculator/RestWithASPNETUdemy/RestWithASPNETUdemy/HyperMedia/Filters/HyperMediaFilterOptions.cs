@@ -1,7 +1,7 @@
-﻿using RestWithASPNETUdemy.Hipermedia.Abstract;
+﻿using RestWithASPNETUdemy.HyperMedia.Abstract;
 using System.Collections.Generic;
 
-namespace RestWithASPNETUdemy.Hipermedia.Filters
+namespace RestWithASPNETUdemy.HyperMedia.Filters
 {
   public class HyperMediaFilterOptions
   {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestWithASPNETUdemy.Hipermedia
+namespace RestWithASPNETUdemy.HyperMedia
 {
   public class HyperMediaLink
   {
@@ -26,7 +26,7 @@ namespace RestWithASPNETUdemy.Hipermedia
         href = value; 
       } 
     }
-    public string Tyype { get; set; }
+    public string Type { get; set; }
     public string Action { get; set; }
   }
 }
