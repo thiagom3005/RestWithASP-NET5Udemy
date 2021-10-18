@@ -48,7 +48,7 @@ namespace RestWithASPNETUdemy.HyperMedia.Enricher
         Rel = RelationType.self,
         Type = "int"
       });
-      return (Task)new object();
+      return null;
     }
 
     private string GetLink(long id, IUrlHelper urlHelper, string path)
