@@ -42,6 +42,38 @@ namespace RestWithASPNETUdemy.Business.Implementations
       userValidated.RefreshToken = refreshToken;
       userValidated.RefreshTokenExpiryTime = DateTime.Now.AddDays(_configuration.DaysToExpiry);
 
+      var userUpdated = UpdateUser(userValidated, accessToken, refreshToken);
+      return userUpdated; 
+    }
+
+    public TokenVO ValidateCredentials(TokenVO token)
+    {
+      var accessToken = token.AccessToken;
+      var refreshToken = token.RefreshToken;
+      var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+      var userName = principal.Identity.Name;
+      var user = _repository.ValidaCredentials(userName);
+
+      if (user == null ||
+        user.RefreshToken != refreshToken ||
+        user.RefreshTokenExpiryTime <= DateTime.Now) return null;
+
+      accessToken = _tokenService.GenerateAccessToken(principal.Claims);
+      refreshToken = _tokenService.GenerateRefreshToken();
+
+      user.RefreshToken = refreshToken; 
+      
+      var userUpdated = UpdateUser(user, accessToken, refreshToken);
+      return userUpdated;
+    }
+
+    public bool RevokeToken(string userName)
+    {
+      return _repository.RevokeToken(userName);
+    }
+
+    private TokenVO UpdateUser(Model.User userValidated, string accessToken, string refreshToken)
+    {
       _repository.RefreshUserInfo(userValidated);
 
       DateTime createDate = DateTime.Now;
