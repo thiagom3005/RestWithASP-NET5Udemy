@@ -1,5 +1,6 @@
 ﻿using RestWithASPNETUdemy.Data.Converter.Implementations;
 using RestWithASPNETUdemy.Data.VO;
+using RestWithASPNETUdemy.HyperMedia.Utils;
 using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ namespace RestWithASPNETUdemy.Business.Implementations
 {
   public class PersonBusiness : IPersonBusiness
   {
-    private readonly IRepository<Person> _personRepository;
+    private readonly IPersonRepository _personRepository;
     private readonly PersonConverter _converter;
 
-    public PersonBusiness(IRepository<Person> context)
+    public PersonBusiness(IPersonRepository context)
     {
       _personRepository = context;
       _converter = new PersonConverter();
@@ -26,6 +27,15 @@ namespace RestWithASPNETUdemy.Business.Implementations
     {
       return _converter.Parse(_personRepository.FindById(id));
     }
+    public PagedSearchVO<PersonVO> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public List<PersonVO> FindByName(string firstName, string lastName)
+    {
+      return _converter.Parse(_personRepository.FindByName(firstName, lastName));
+    }
 
     public PersonVO Create(PersonVO person)
     {
@@ -38,6 +48,12 @@ namespace RestWithASPNETUdemy.Business.Implementations
     {
       var personEntity = _converter.Parse(person);
       personEntity = _personRepository.Update(personEntity);
+      return _converter.Parse(personEntity);
+    }
+
+    public PersonVO Disable(long id)
+    {
+      var personEntity = _personRepository.Disable(id);
       return _converter.Parse(personEntity);
     }
 

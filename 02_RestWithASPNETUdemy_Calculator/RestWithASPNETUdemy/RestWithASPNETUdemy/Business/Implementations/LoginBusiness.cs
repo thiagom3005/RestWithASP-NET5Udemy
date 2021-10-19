@@ -1,4 +1,5 @@
 ﻿using RestWithASPNETUdemy.Data.VO;
+using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository;
 using RestWithASPNETUdemy.Token.Configurations;
 using RestWithASPNETUdemy.Token.Services;
@@ -72,7 +73,7 @@ namespace RestWithASPNETUdemy.Business.Implementations
       return _repository.RevokeToken(userName);
     }
 
-    private TokenVO UpdateUser(Model.User userValidated, string accessToken, string refreshToken)
+    private TokenVO UpdateUser(User userValidated, string accessToken, string refreshToken)
     {
       _repository.RefreshUserInfo(userValidated);
 
