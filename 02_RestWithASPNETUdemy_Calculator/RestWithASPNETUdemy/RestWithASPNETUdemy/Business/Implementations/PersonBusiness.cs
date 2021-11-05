@@ -29,7 +29,30 @@ namespace RestWithASPNETUdemy.Business.Implementations
     }
     public PagedSearchVO<PersonVO> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page)
     {
-      throw new System.NotImplementedException();
+      var sort = (!string.IsNullOrWhiteSpace(sortDirection)) && !sortDirection.Equals("desc") ? "asc" : "desc";
+      var size = pageSize < 1 ? 10 : pageSize;
+      var offset = page > 0 ? (page - 1) * size : 0;
+
+      string query = @"select * from person p where 1 = 1 ";
+      if (!string.IsNullOrWhiteSpace(name))
+        query = query + $" and p.first_name like '%{name}%' ";
+      query = query + $" order by p.first_name {sort} limit {size} offset {offset}";
+
+      string countQuery = @"select count(*) from person p where 1 = 1 ";
+      if (!string.IsNullOrWhiteSpace(name))
+        countQuery = countQuery + $" and p.first_name like '%{name}%' ";
+
+      var persons = _personRepository.FindWithPagedSearch(query);
+      var totalRersons = _personRepository.GetCount(countQuery);
+
+      return new PagedSearchVO<PersonVO>
+      {
+        CurrentPage = page,
+        List = _converter.Parse(persons),
+        PageSize = size,
+        SortDirections = sort,
+        TotalResults = totalRersons
+      };
     }
 
     public List<PersonVO> FindByName(string firstName, string lastName)
